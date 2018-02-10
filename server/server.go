@@ -12,6 +12,7 @@ type server struct {
 }
 
 func (s *server) Register(ctx context.Context, r *pb.RegisterRequest) (*pb.RegisterResponse, error) {
+
 	return nil, nil
 }
 
