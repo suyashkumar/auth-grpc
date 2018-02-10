@@ -1,8 +1,9 @@
 syntax = "proto3";
 
 enum Permissions {
-    USER = 0;
-    ADMIN = 1;
+    API = 0;
+    USER = 1;
+    ADMIN = 2;
 }
 
 message User {
@@ -11,6 +12,12 @@ message User {
     string firstName = 3;
     string lastName = 4;
     Permissions permissions = 5;
+}
+
+message Claims {
+    string userUUID = 1;
+    string email = 2;
+    Permissions permissions = 3;
 }
 
 message RegisterRequest {
@@ -28,6 +35,7 @@ message RegisterResponse {
 message GetTokenRequest {
     string email = 1;
     string password = 2;
+    Permissions requestedPermissions = 3;
 }
 
 message GetTokenResponse {
@@ -39,7 +47,7 @@ message ValidateRequest {
 }
 
 message ValidateResponse {
-    User user = 1;
+    Claims claims = 1;
 }
 
 service Auth {
