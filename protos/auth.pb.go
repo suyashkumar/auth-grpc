@@ -9,10 +9,11 @@ It is generated from these files:
 
 It has these top-level messages:
 	User
+	Claims
 	RegisterRequest
 	RegisterResponse
-	LoginRequest
-	LoginResponse
+	GetTokenRequest
+	GetTokenResponse
 	ValidateRequest
 	ValidateResponse
 */
@@ -41,17 +42,20 @@ const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 type Permissions int32
 
 const (
-	Permissions_USER  Permissions = 0
-	Permissions_ADMIN Permissions = 1
+	Permissions_API   Permissions = 0
+	Permissions_USER  Permissions = 1
+	Permissions_ADMIN Permissions = 2
 )
 
 var Permissions_name = map[int32]string{
-	0: "USER",
-	1: "ADMIN",
+	0: "API",
+	1: "USER",
+	2: "ADMIN",
 }
 var Permissions_value = map[string]int32{
-	"USER":  0,
-	"ADMIN": 1,
+	"API":   0,
+	"USER":  1,
+	"ADMIN": 2,
 }
 
 func (x Permissions) String() string {
@@ -104,17 +108,73 @@ func (m *User) GetPermissions() Permissions {
 	if m != nil {
 		return m.Permissions
 	}
-	return Permissions_USER
+	return Permissions_API
+}
+
+type Claims struct {
+	UserUUID    string      `protobuf:"bytes,1,opt,name=userUUID" json:"userUUID,omitempty"`
+	Email       string      `protobuf:"bytes,2,opt,name=email" json:"email,omitempty"`
+	Permissions Permissions `protobuf:"varint,3,opt,name=permissions,enum=Permissions" json:"permissions,omitempty"`
+}
+
+func (m *Claims) Reset()                    { *m = Claims{} }
+func (m *Claims) String() string            { return proto.CompactTextString(m) }
+func (*Claims) ProtoMessage()               {}
+func (*Claims) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{1} }
+
+func (m *Claims) GetUserUUID() string {
+	if m != nil {
+		return m.UserUUID
+	}
+	return ""
+}
+
+func (m *Claims) GetEmail() string {
+	if m != nil {
+		return m.Email
+	}
+	return ""
+}
+
+func (m *Claims) GetPermissions() Permissions {
+	if m != nil {
+		return m.Permissions
+	}
+	return Permissions_API
 }
 
 type RegisterRequest struct {
-	Password string `protobuf:"bytes,1,opt,name=password" json:"password,omitempty"`
+	Email     string `protobuf:"bytes,1,opt,name=email" json:"email,omitempty"`
+	FirstName string `protobuf:"bytes,2,opt,name=firstName" json:"firstName,omitempty"`
+	LastName  string `protobuf:"bytes,3,opt,name=lastName" json:"lastName,omitempty"`
+	Password  string `protobuf:"bytes,4,opt,name=password" json:"password,omitempty"`
 }
 
 func (m *RegisterRequest) Reset()                    { *m = RegisterRequest{} }
 func (m *RegisterRequest) String() string            { return proto.CompactTextString(m) }
 func (*RegisterRequest) ProtoMessage()               {}
-func (*RegisterRequest) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{1} }
+func (*RegisterRequest) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{2} }
+
+func (m *RegisterRequest) GetEmail() string {
+	if m != nil {
+		return m.Email
+	}
+	return ""
+}
+
+func (m *RegisterRequest) GetFirstName() string {
+	if m != nil {
+		return m.FirstName
+	}
+	return ""
+}
+
+func (m *RegisterRequest) GetLastName() string {
+	if m != nil {
+		return m.LastName
+	}
+	return ""
+}
 
 func (m *RegisterRequest) GetPassword() string {
 	if m != nil {
@@ -129,42 +189,50 @@ type RegisterResponse struct {
 func (m *RegisterResponse) Reset()                    { *m = RegisterResponse{} }
 func (m *RegisterResponse) String() string            { return proto.CompactTextString(m) }
 func (*RegisterResponse) ProtoMessage()               {}
-func (*RegisterResponse) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{2} }
+func (*RegisterResponse) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{3} }
 
-type LoginRequest struct {
-	Email    string `protobuf:"bytes,1,opt,name=email" json:"email,omitempty"`
-	Password string `protobuf:"bytes,2,opt,name=password" json:"password,omitempty"`
+type GetTokenRequest struct {
+	Email                string      `protobuf:"bytes,1,opt,name=email" json:"email,omitempty"`
+	Password             string      `protobuf:"bytes,2,opt,name=password" json:"password,omitempty"`
+	RequestedPermissions Permissions `protobuf:"varint,3,opt,name=requestedPermissions,enum=Permissions" json:"requestedPermissions,omitempty"`
 }
 
-func (m *LoginRequest) Reset()                    { *m = LoginRequest{} }
-func (m *LoginRequest) String() string            { return proto.CompactTextString(m) }
-func (*LoginRequest) ProtoMessage()               {}
-func (*LoginRequest) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{3} }
+func (m *GetTokenRequest) Reset()                    { *m = GetTokenRequest{} }
+func (m *GetTokenRequest) String() string            { return proto.CompactTextString(m) }
+func (*GetTokenRequest) ProtoMessage()               {}
+func (*GetTokenRequest) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{4} }
 
-func (m *LoginRequest) GetEmail() string {
+func (m *GetTokenRequest) GetEmail() string {
 	if m != nil {
 		return m.Email
 	}
 	return ""
 }
 
-func (m *LoginRequest) GetPassword() string {
+func (m *GetTokenRequest) GetPassword() string {
 	if m != nil {
 		return m.Password
 	}
 	return ""
 }
 
-type LoginResponse struct {
+func (m *GetTokenRequest) GetRequestedPermissions() Permissions {
+	if m != nil {
+		return m.RequestedPermissions
+	}
+	return Permissions_API
+}
+
+type GetTokenResponse struct {
 	Token string `protobuf:"bytes,1,opt,name=token" json:"token,omitempty"`
 }
 
-func (m *LoginResponse) Reset()                    { *m = LoginResponse{} }
-func (m *LoginResponse) String() string            { return proto.CompactTextString(m) }
-func (*LoginResponse) ProtoMessage()               {}
-func (*LoginResponse) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{4} }
+func (m *GetTokenResponse) Reset()                    { *m = GetTokenResponse{} }
+func (m *GetTokenResponse) String() string            { return proto.CompactTextString(m) }
+func (*GetTokenResponse) ProtoMessage()               {}
+func (*GetTokenResponse) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{5} }
 
-func (m *LoginResponse) GetToken() string {
+func (m *GetTokenResponse) GetToken() string {
 	if m != nil {
 		return m.Token
 	}
@@ -178,7 +246,7 @@ type ValidateRequest struct {
 func (m *ValidateRequest) Reset()                    { *m = ValidateRequest{} }
 func (m *ValidateRequest) String() string            { return proto.CompactTextString(m) }
 func (*ValidateRequest) ProtoMessage()               {}
-func (*ValidateRequest) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{5} }
+func (*ValidateRequest) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{6} }
 
 func (m *ValidateRequest) GetToken() string {
 	if m != nil {
@@ -188,27 +256,28 @@ func (m *ValidateRequest) GetToken() string {
 }
 
 type ValidateResponse struct {
-	User *User `protobuf:"bytes,1,opt,name=user" json:"user,omitempty"`
+	Claims *Claims `protobuf:"bytes,1,opt,name=claims" json:"claims,omitempty"`
 }
 
 func (m *ValidateResponse) Reset()                    { *m = ValidateResponse{} }
 func (m *ValidateResponse) String() string            { return proto.CompactTextString(m) }
 func (*ValidateResponse) ProtoMessage()               {}
-func (*ValidateResponse) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{6} }
+func (*ValidateResponse) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{7} }
 
-func (m *ValidateResponse) GetUser() *User {
+func (m *ValidateResponse) GetClaims() *Claims {
 	if m != nil {
-		return m.User
+		return m.Claims
 	}
 	return nil
 }
 
 func init() {
 	proto.RegisterType((*User)(nil), "User")
+	proto.RegisterType((*Claims)(nil), "Claims")
 	proto.RegisterType((*RegisterRequest)(nil), "RegisterRequest")
 	proto.RegisterType((*RegisterResponse)(nil), "RegisterResponse")
-	proto.RegisterType((*LoginRequest)(nil), "LoginRequest")
-	proto.RegisterType((*LoginResponse)(nil), "LoginResponse")
+	proto.RegisterType((*GetTokenRequest)(nil), "GetTokenRequest")
+	proto.RegisterType((*GetTokenResponse)(nil), "GetTokenResponse")
 	proto.RegisterType((*ValidateRequest)(nil), "ValidateRequest")
 	proto.RegisterType((*ValidateResponse)(nil), "ValidateResponse")
 	proto.RegisterEnum("Permissions", Permissions_name, Permissions_value)
@@ -226,7 +295,7 @@ const _ = grpc.SupportPackageIsVersion4
 
 type AuthClient interface {
 	Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error)
-	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
+	GetToken(ctx context.Context, in *GetTokenRequest, opts ...grpc.CallOption) (*GetTokenResponse, error)
 	Validate(ctx context.Context, in *ValidateRequest, opts ...grpc.CallOption) (*ValidateResponse, error)
 }
 
@@ -247,9 +316,9 @@ func (c *authClient) Register(ctx context.Context, in *RegisterRequest, opts ...
 	return out, nil
 }
 
-func (c *authClient) Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error) {
-	out := new(LoginResponse)
-	err := grpc.Invoke(ctx, "/Auth/Login", in, out, c.cc, opts...)
+func (c *authClient) GetToken(ctx context.Context, in *GetTokenRequest, opts ...grpc.CallOption) (*GetTokenResponse, error) {
+	out := new(GetTokenResponse)
+	err := grpc.Invoke(ctx, "/Auth/GetToken", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -269,7 +338,7 @@ func (c *authClient) Validate(ctx context.Context, in *ValidateRequest, opts ...
 
 type AuthServer interface {
 	Register(context.Context, *RegisterRequest) (*RegisterResponse, error)
-	Login(context.Context, *LoginRequest) (*LoginResponse, error)
+	GetToken(context.Context, *GetTokenRequest) (*GetTokenResponse, error)
 	Validate(context.Context, *ValidateRequest) (*ValidateResponse, error)
 }
 
@@ -295,20 +364,20 @@ func _Auth_Register_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Auth_Login_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(LoginRequest)
+func _Auth_GetToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetTokenRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AuthServer).Login(ctx, in)
+		return srv.(AuthServer).GetToken(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/Auth/Login",
+		FullMethod: "/Auth/GetToken",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServer).Login(ctx, req.(*LoginRequest))
+		return srv.(AuthServer).GetToken(ctx, req.(*GetTokenRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -340,8 +409,8 @@ var _Auth_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Auth_Register_Handler,
 		},
 		{
-			MethodName: "Login",
-			Handler:    _Auth_Login_Handler,
+			MethodName: "GetToken",
+			Handler:    _Auth_GetToken_Handler,
 		},
 		{
 			MethodName: "Validate",
@@ -355,27 +424,31 @@ var _Auth_serviceDesc = grpc.ServiceDesc{
 func init() { proto.RegisterFile("auth.proto", fileDescriptor0) }
 
 var fileDescriptor0 = []byte{
-	// 340 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x6c, 0x92, 0x4f, 0x4b, 0xeb, 0x40,
-	0x14, 0xc5, 0x33, 0x7d, 0xc9, 0xa3, 0xbd, 0xfd, 0x97, 0x5e, 0xde, 0x22, 0x2f, 0xb8, 0x28, 0x03,
-	0x62, 0x11, 0x3a, 0x60, 0xfd, 0x02, 0x16, 0x74, 0x21, 0x68, 0x91, 0x48, 0xdd, 0x8f, 0x74, 0x6c,
-	0x07, 0xdb, 0x4c, 0x9c, 0x99, 0xe0, 0x37, 0x71, 0xe1, 0xa7, 0x95, 0x4c, 0x9b, 0x26, 0x46, 0x77,
-	0xb9, 0xe7, 0x9e, 0xfc, 0x32, 0xe7, 0x64, 0x00, 0x78, 0x6e, 0x37, 0x2c, 0xd3, 0xca, 0x2a, 0xfa,
-	0x49, 0xc0, 0x5f, 0x1a, 0xa1, 0x11, 0xc1, 0xcf, 0x73, 0xb9, 0x8a, 0xc8, 0x98, 0x4c, 0x3a, 0x89,
-	0x7b, 0xc6, 0x7f, 0x10, 0x88, 0x1d, 0x97, 0xdb, 0xa8, 0xe5, 0xc4, 0xfd, 0x80, 0x27, 0xd0, 0x79,
-	0x91, 0xda, 0xd8, 0x05, 0xdf, 0x89, 0xe8, 0x8f, 0xdb, 0x54, 0x02, 0xc6, 0xd0, 0xde, 0xf2, 0xc3,
-	0xd2, 0x77, 0xcb, 0xe3, 0x8c, 0x0c, 0xba, 0x99, 0xd0, 0x3b, 0x69, 0x8c, 0x54, 0xa9, 0x89, 0x82,
-	0x31, 0x99, 0x0c, 0x66, 0x3d, 0xf6, 0x50, 0x69, 0x49, 0xdd, 0x40, 0xa7, 0x30, 0x4c, 0xc4, 0x5a,
-	0x1a, 0x2b, 0x74, 0x22, 0xde, 0x72, 0x61, 0x6c, 0x81, 0xcf, 0xb8, 0x31, 0xef, 0x4a, 0x97, 0x47,
-	0x3d, 0xce, 0x14, 0x21, 0xac, 0xec, 0x26, 0x53, 0xa9, 0x11, 0xf4, 0x0a, 0x7a, 0x77, 0x6a, 0x2d,
-	0xd3, 0xf2, 0xfd, 0x63, 0x24, 0x52, 0x8f, 0x54, 0xa7, 0xb6, 0x1a, 0xd4, 0x53, 0xe8, 0x1f, 0x08,
-	0x7b, 0x64, 0x81, 0xb0, 0xea, 0x55, 0xa4, 0x25, 0xc2, 0x0d, 0xf4, 0x0c, 0x86, 0x4f, 0x7c, 0x2b,
-	0x57, 0xdc, 0x8a, 0xda, 0xb7, 0x7e, 0x31, 0x4e, 0x21, 0xac, 0x8c, 0x07, 0xe4, 0x7f, 0xf0, 0x73,
-	0x23, 0xb4, 0x33, 0x76, 0x67, 0x01, 0x2b, 0xfe, 0x48, 0xe2, 0xa4, 0x73, 0x0a, 0xdd, 0x5a, 0x3f,
-	0xd8, 0x06, 0x7f, 0xf9, 0x78, 0x93, 0x84, 0x1e, 0x76, 0x20, 0x98, 0x5f, 0xdf, 0xdf, 0x2e, 0x42,
-	0x32, 0xfb, 0x20, 0xe0, 0xcf, 0x73, 0xbb, 0xc1, 0x0b, 0x68, 0x97, 0x0d, 0x60, 0xc8, 0x1a, 0xdd,
-	0xc5, 0x23, 0xf6, 0xa3, 0x1e, 0x0f, 0x27, 0x10, 0xb8, 0x78, 0xd8, 0x67, 0xf5, 0xa2, 0xe2, 0x01,
-	0xfb, 0x96, 0x9a, 0x7a, 0x05, 0xbc, 0x3c, 0x38, 0x86, 0xac, 0x11, 0x36, 0x1e, 0xb1, 0x66, 0x2a,
-	0xea, 0x3d, 0xff, 0x75, 0x97, 0xec, 0xf2, 0x2b, 0x00, 0x00, 0xff, 0xff, 0xde, 0xd9, 0x0f, 0xea,
-	0x72, 0x02, 0x00, 0x00,
+	// 401 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x53, 0xcd, 0xce, 0x93, 0x40,
+	0x14, 0xed, 0x00, 0xed, 0x47, 0x6f, 0x8d, 0x9d, 0x4e, 0xbe, 0x05, 0x21, 0x26, 0x36, 0x6c, 0x6c,
+	0x34, 0x99, 0xc4, 0xf6, 0x05, 0x6c, 0xac, 0x31, 0x5d, 0xd8, 0x34, 0x28, 0xee, 0x47, 0x19, 0xed,
+	0x28, 0x14, 0x9c, 0x19, 0xe2, 0xca, 0xa5, 0x2f, 0xe1, 0xc6, 0x57, 0x35, 0x0c, 0x50, 0x90, 0xaf,
+	0x3f, 0x3b, 0xee, 0x9d, 0x73, 0xcf, 0x3d, 0xe7, 0xdc, 0x00, 0xc0, 0x0a, 0x7d, 0xa0, 0xb9, 0xcc,
+	0x74, 0x16, 0xfc, 0x41, 0xe0, 0x44, 0x8a, 0x4b, 0x42, 0xc0, 0x29, 0x0a, 0x11, 0x7b, 0x68, 0x8e,
+	0x16, 0xe3, 0xd0, 0x7c, 0x93, 0x7b, 0x18, 0xf2, 0x94, 0x89, 0xc4, 0xb3, 0x4c, 0xb3, 0x2a, 0xc8,
+	0x13, 0x18, 0x7f, 0x11, 0x52, 0xe9, 0x1d, 0x4b, 0xb9, 0x67, 0x9b, 0x97, 0xb6, 0x41, 0x7c, 0x70,
+	0x13, 0x56, 0x3f, 0x3a, 0xe6, 0xf1, 0x54, 0x13, 0x0a, 0x93, 0x9c, 0xcb, 0x54, 0x28, 0x25, 0xb2,
+	0xa3, 0xf2, 0x86, 0x73, 0xb4, 0x78, 0xbc, 0x7c, 0x44, 0xf7, 0x6d, 0x2f, 0xec, 0x02, 0x82, 0x6f,
+	0x30, 0x7a, 0x9d, 0x30, 0x91, 0xaa, 0x92, 0xb5, 0x50, 0x5c, 0x46, 0xd1, 0x76, 0x53, 0x2b, 0x3c,
+	0xd5, 0x17, 0x54, 0xf6, 0x76, 0xd9, 0xb7, 0x76, 0xfd, 0x82, 0x69, 0xc8, 0xbf, 0x0a, 0xa5, 0xb9,
+	0x0c, 0xf9, 0x8f, 0x82, 0x2b, 0xdd, 0x12, 0xa3, 0x8b, 0xf6, 0xad, 0x6b, 0xf6, 0xed, 0x9e, 0x7d,
+	0x1f, 0xdc, 0x9c, 0x29, 0xf5, 0x33, 0x93, 0x71, 0x13, 0x4d, 0x53, 0x07, 0x04, 0x70, 0xbb, 0x5e,
+	0xe5, 0xd9, 0x51, 0xf1, 0xe0, 0x37, 0x82, 0xe9, 0x5b, 0xae, 0x3f, 0x64, 0xdf, 0xf9, 0xf1, 0xba,
+	0xa6, 0x2e, 0xb3, 0xf5, 0x3f, 0x33, 0x79, 0x05, 0xf7, 0xb2, 0x1a, 0xe6, 0xf1, 0xfe, 0x46, 0x22,
+	0x67, 0x91, 0xc1, 0x02, 0x70, 0x2b, 0xa3, 0xd2, 0x56, 0xea, 0xd0, 0x65, 0xa3, 0xd1, 0x61, 0x8a,
+	0xe0, 0x19, 0x4c, 0x3f, 0xb2, 0x44, 0xc4, 0x4c, 0xf3, 0x8e, 0xe0, 0x33, 0xc0, 0x15, 0xe0, 0x16,
+	0x58, 0x53, 0x3e, 0x85, 0xd1, 0x67, 0x73, 0x6d, 0x03, 0x9d, 0x2c, 0xef, 0x68, 0x75, 0xfc, 0xb0,
+	0x6e, 0x3f, 0x7f, 0x01, 0x93, 0x8e, 0x2c, 0x72, 0x07, 0xf6, 0x7a, 0xbf, 0xc5, 0x03, 0xe2, 0x82,
+	0x13, 0xbd, 0x7f, 0x13, 0x62, 0x44, 0xc6, 0x30, 0x5c, 0x6f, 0xde, 0x6d, 0x77, 0xd8, 0x5a, 0xfe,
+	0x45, 0xe0, 0xac, 0x0b, 0x7d, 0x20, 0x2f, 0xc1, 0x6d, 0x92, 0x25, 0x98, 0xf6, 0x6e, 0xec, 0xcf,
+	0xe8, 0x83, 0xd8, 0x07, 0xe5, 0x48, 0x63, 0x98, 0x60, 0xda, 0x3b, 0x81, 0x3f, 0xa3, 0xfd, 0x34,
+	0xaa, 0x91, 0xc6, 0x10, 0xc1, 0xb4, 0x17, 0x82, 0x3f, 0xa3, 0x7d, 0xb7, 0xc1, 0xe0, 0xd3, 0xc8,
+	0xfc, 0x81, 0xab, 0x7f, 0x01, 0x00, 0x00, 0xff, 0xff, 0x2d, 0xaf, 0x34, 0xbe, 0x8f, 0x03, 0x00,
+	0x00,
 }
