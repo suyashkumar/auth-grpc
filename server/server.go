@@ -15,7 +15,7 @@ func (s *server) Register(ctx context.Context, r *pb.RegisterRequest) (*pb.Regis
 	return nil, nil
 }
 
-func (s *server) Login(ctx context.Context, r *pb.LoginRequest) (*pb.LoginResponse, error) {
+func (s *server) GetToken(ctx context.Context, r *pb.GetTokenRequest) (*pb.GetTokenResponse, error) {
 	return nil, nil
 }
 

@@ -25,12 +25,12 @@ message RegisterResponse {
 
 }
 
-message LoginRequest {
+message GetTokenRequest {
     string email = 1;
     string password = 2;
 }
 
-message LoginResponse {
+message GetTokenResponse {
     string token = 1;
 }
 
@@ -44,6 +44,6 @@ message ValidateResponse {
 
 service Auth {
     rpc Register(RegisterRequest) returns (RegisterResponse) {}
-    rpc Login(LoginRequest) returns (LoginResponse) {}
+    rpc GetToken(GetTokenRequest) returns (GetTokenResponse) {}
     rpc Validate(ValidateRequest) returns (ValidateResponse) {}
 }
