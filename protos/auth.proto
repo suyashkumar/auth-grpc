@@ -14,7 +14,11 @@ message User {
 }
 
 message RegisterRequest {
-    string password = 1;
+    string email = 1;
+    string firstName = 2;
+    string lastName = 3;
+    string password = 4;
+    // TODO: permissioning
 }
 
 message RegisterResponse {

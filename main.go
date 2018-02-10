@@ -1,25 +1,34 @@
 package main
 
 import (
-	"google.golang.org/grpc"
+	"net"
+
+	"github.com/sirupsen/logrus"
+	"github.com/suyashkumar/auth-grpc/config"
+	"github.com/suyashkumar/auth-grpc/log"
 	pb "github.com/suyashkumar/auth-grpc/protos"
 	"github.com/suyashkumar/auth-grpc/server"
-	"net"
-	"log"
+	"google.golang.org/grpc"
 )
 
 func main() {
 
-	s := grpc.NewServer()
-	pb.RegisterAuthServer(s, server.NewServer())
+	log.Configure()
 
-	l, err := net.Listen("tcp", ":8000")
+	s := grpc.NewServer()
+	as, err := server.NewServer()
 	if err != nil {
-		log.Fatalf("Failed to open listener on PORT. %+v", err)
+		logrus.WithError(err).Error("Error initializing AuthServer implementation")
+	}
+	pb.RegisterAuthServer(s, as)
+
+	l, err := net.Listen("tcp", config.Get(config.Port))
+	if err != nil {
+		logrus.Error(err)
 	}
 
 	if err := s.Serve(l); err != nil {
-		log.Fatalf("failed to serve %+v", err)
+		logrus.WithError(err).Error("Error starting up server")
 	}
 
 }
