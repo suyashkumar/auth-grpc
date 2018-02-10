@@ -1,5 +1,5 @@
 # auth-grpc [WIP]
-A simple (but opinionated) Golang authentication gRPC microservice that implements very simple interface (below) that comes with batteries included (permissions, hashing, validation, etc). This is a gRPC wrapper around my core [suyashkumar/auth](https://github.com/suyashkumar/auth) library.
+A simple (but opinionated) Golang authentication gRPC microservice that implements very simple interface (below) that comes with batteries included (permissions, hashing, validation, etc). This is a gRPC wrapper around my core [suyashkumar/auth](https://github.com/suyashkumar/auth) Go authentication library.
 
 ```go
 type Auth interface {
@@ -9,7 +9,7 @@ type Auth interface {
 }
 ```
 
-You only need to set a database `connectionString` and `signingKey`, and everything else is taken care of for you including:
+You only need to set a database `DbConnString` and `SigningKey` environment variables, and everything else is taken care of for you including:
 * table and database setup (including uniqueness constraints and useful indicies)
 * hashing passwords using `bcrypt` on register
 * comparing hashed passwords on login
