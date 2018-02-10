@@ -1,0 +1,20 @@
+version: '2'
+services:
+  auth_grpc:
+    build: .
+    environment:
+      - DBConnString="host=db port=5432 user=postgres sslmode=disable dbname=postgres password=postgres123test"
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+  db:
+    image: postgres:latest
+    environment:
+      - POSTGRES_PASSWORD=postgres123test
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
+    volumes:
+      - "db_volume_4:/var/lib/postgresql/data"
+volumes:
+  db_volume_4:
