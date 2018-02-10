@@ -1,3 +1,4 @@
 auth-grpc
 vendor/
 .idea/
+logs.txt
