@@ -3,11 +3,12 @@ services:
   auth_grpc:
     build: .
     environment:
-      - DBConnString="host=db port=5432 user=postgres sslmode=disable dbname=postgres password=postgres123test"
+      - DBConnString=host=db port=5432 user=postgres sslmode=disable dbname=postgres password=postgres123test
     ports:
       - 8000:8000
     depends_on:
       - db
+    command: ["./wait-for-it.sh", "db:5432", "--", "./auth-grpc"]
   db:
     image: postgres:latest
     environment:
@@ -15,6 +16,6 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_DB=postgres
     volumes:
-      - "db_volume_4:/var/lib/postgresql/data"
+      - "db_volume:/var/lib/postgresql/data"
 volumes:
-  db_volume_4:
+  db_volume:
