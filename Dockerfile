@@ -10,5 +10,6 @@ RUN apt-get install unzip
 RUN unzip protoc-3.4.0-linux-x86_64.zip
 RUN cp bin/protoc /usr/bin
 RUN make
+RUN cp wait-for-it/wait-for-it.sh .
 RUN chmod +x wait-for-it.sh
 CMD ./auth-grpc
